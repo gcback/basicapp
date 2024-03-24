@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "882231392840",
+    "project_id": "basicapp-313b2",
+    "storage_bucket": "basicapp-313b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882231392840:android:33cd177d7e4a6b196df67d",
+        "android_client_info": {
+          "package_name": "com.example.basicapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882231392840-k28gvfiq11gupl1e8gko4gcq0jn5uv83.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG4tKr-OwtWfe-dp94wrtObnAc770OrfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882231392840-k28gvfiq11gupl1e8gko4gcq0jn5uv83.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "882231392840-0jkdad13gdr61k7n7nh09s5tja1ql569.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.basicapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

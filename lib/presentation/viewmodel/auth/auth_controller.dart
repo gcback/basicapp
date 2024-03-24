@@ -1,40 +1,20 @@
-import 'package:mylib/mylib.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../pages/component.dart';
 import 'auth.dart';
-import 'auth_persistance.dart';
-import 'auth_persistance_shared_preference.dart';
+import 'auth_interface.dart';
+import '../../pages/component.dart';
 
 part 'auth_controller.g.dart';
 
-////////
-abstract class AuthIface {
-  Future<bool> login(String email, String password);
-  Future<void> logout();
-  Future<bool> signup(String email, String password);
-
-  Future<bool> loginWithGoogle();
-}
-
 @riverpod
 class AuthController extends _$AuthController implements AuthIface {
-  static const _persistanceKey = 'token';
-  late AuthPersistance _persistance;
-
   @override
   Future<Auth> build() async {
-    _persistance = await ref.watch(sharedPreferencePersistanceProvider.future);
-
-    // _persistenceRefreshLogic();
-
-    return _loginRecoveryAttempt2();
+    return _loginRecoveryAttempt();
   }
 
-  Future<Auth> _loginRecoveryAttempt2() async {
+  Future<Auth> _loginRecoveryAttempt() async {
     if (auth.currentUser case var user?) {
-      print('recoverying an auth state...');
-
       return Auth.signedIn(
         id: user.hashCode,
         email: user.email ?? '',
@@ -43,69 +23,9 @@ class AuthController extends _$AuthController implements AuthIface {
       );
     }
 
-    _persistance.remove(_persistanceKey);
     return Auth.signedOut();
   }
 
-  void _persistenceRefreshLogic() {
-    ref.listenSelf((_, AsyncValue<Auth> next) {
-      switch (next) {
-        case AsyncLoading():
-        case AsyncError():
-          _persistance.remove(_persistanceKey);
-        default:
-          next.requireValue.map<void>(
-            signedIn: (signedIn) => _persistance.set(_persistanceKey, signedIn.token),
-            signedOut: (signedOut) {
-              _persistance.remove(_persistanceKey);
-            },
-          );
-      }
-    });
-  }
-
-  Future<Auth> _loginRecoveryAttempt() async {
-    try {
-      final savedToken = _persistance.get(_persistanceKey);
-
-      if (savedToken case var savedToken?) {
-        return _loginWithToken(savedToken);
-      }
-
-      /// splash delay mock
-      await Future.delayed(1.secs);
-
-      throw const UnauthorizedException('No auth token found');
-    } catch (_, __) {
-      _persistance.remove(_persistanceKey).ignore();
-
-      return Future.value(Auth.signedOut());
-    }
-  }
-
-  Future<Auth> _loginWithToken(String token) async {
-    try {
-      final userCredential = await signinWithToken(token);
-      if (userCredential.user case var user?) {
-        return Auth.signedIn(
-          id: user.hashCode,
-          email: user.email ?? '',
-          token: (await user.getIdToken()) ?? '',
-          displayName: user.displayName ?? '',
-        );
-      }
-    } on UnauthorizedException catch (e) {
-      showSnackBar(e.message);
-
-      _persistance.remove(_persistanceKey).ignore();
-
-      return Future.value(Auth.signedOut());
-    }
-
-    throw const UnauthorizedException('401 Unauthorized or something');
-  }
-
-  ///
   ///
   @override
   Future<bool> login(String email, String password) async {
@@ -142,6 +62,10 @@ class AuthController extends _$AuthController implements AuthIface {
 
   @override
   Future<bool> signup(String email, String password) async {
+    
+
+
+
     try {
       final userCredential = await signupWithEmail(email, password);
 

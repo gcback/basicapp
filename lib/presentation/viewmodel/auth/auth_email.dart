@@ -25,11 +25,3 @@ Future<UserCredential> signinWithEmail(String email, String password) async {
     throw UnauthorizedException('signInWithEmailAndPassword failed: ${authReasonMap[e.code]}');
   }
 }
-
-Future<UserCredential> signinWithToken(String token) {
-  try {
-    return auth.signInWithCustomToken(token);
-  } on FirebaseAuthException catch (e) {
-    throw UnauthorizedException('signInWithCustomToken failed: ${authReasonMap[e.code]}');
-  }
-}

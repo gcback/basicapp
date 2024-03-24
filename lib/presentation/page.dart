@@ -18,7 +18,6 @@ import 'viewmodel/auth/auth.dart';
 import 'viewmodel/profile_controller.dart';
 
 import 'navigation/navbar_state.dart';
-import 'order_status.dart';
 import 'pages/component.dart';
 
 part 'pages/home_page.dart';
